@@ -32,8 +32,7 @@ namespace BookingApp.ConsoleHelpers
                 }
 
                 int nr;
-                MenuList menu = (MenuList)99; //Default
-                //Om man har fler än 9 val välj ReadLine och inte ReadKey!
+                MenuList menu = (MenuList)99; 
                 if (int.TryParse(Console.ReadKey(true).KeyChar.ToString(), out nr))
                 {
 

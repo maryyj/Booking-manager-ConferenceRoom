@@ -137,16 +137,25 @@ namespace BookingApp.ConsoleHelpers
                 Console.Write("Ange id på rummet du vill ta bort: ");
                 var roomId = Convert.ToInt32(Console.ReadLine());
                 var deleteRoom = (from r in myDb.Rooms
-                                  where r.Id == (roomId)
-                                  select r).SingleOrDefault();
+                                  join b in myDb.Bookings on r.Id equals b.RoomId
+                                  where r.Id == (roomId) && b.Name == null
+                                  select r);
+
                 if (deleteRoom != null)
                 {
-                    myDb.Rooms.Remove(deleteRoom);
-                    myDb.SaveChanges();
+                    try
+                    {
+                        myDb.Rooms.RemoveRange(deleteRoom);
+                        myDb.SaveChanges();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"Rum {roomId} innehåller bokningar och går därför inte att ta bort");
+                    }
                 }
                 else
                 {
-                    Console.WriteLine("Id't du angav finns inte.");
+                    Console.WriteLine("Det gick inte att ta bort.");
                 }
             }
         }
